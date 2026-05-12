@@ -202,38 +202,38 @@ pipeline {
             }
         }
         
-        stage('Docker Container create')
-        {
-            when {
-                anyOf {
-                    branch 'main'
-                    branch 'origin/main'
-                    expression { env.GIT_BRANCH == 'origin/main' }
-                    expression { env.GIT_BRANCH == 'main' }
-                }
-            }
+        stage('Docker Container create') {
             steps {
-                echo '================================================'
-                echo 'Stage: Docker Container Create'
-                echo '================================================'
                 script {
-                    try {
-                        echo "Creating Docker container from image..."
-                        sh """
-                            sudo docker stop ${env.APP_NAME} 2>/dev/null || true
-                            sudo docker rm ${env.APP_NAME} 2>/dev/null || true
-                            sudo docker run -d -p 1000:5000 --name jenkins-maven-project umahalle/jenkins-maven-project:latest
+                    echo "Cleaning old containers..."
 
-                        """
-                        echo "✓ Docker container created successfully"
-                        sh "docker ps | grep ${env.APP_NAME}"
-                    } catch (Exception e) {
-                        echo "⚠ Docker container creation failed or Docker not available: ${e.message}"
-                        echo "Consider running the application locally using the JAR file"
-                    }
+                    sh '''
+                        docker stop jenkins-maven-project || true
+                        docker rm jenkins-maven-project || true
+                    '''
+
+                    echo "Running container..."
+
+                    sh '''
+                        docker run -d \
+                        -p 8090:5000 \
+                        --name jenkins-maven-project \
+                        umahalle/jenkins-maven-project:latest
+                    '''
+
+                    echo "Checking container status..."
+
+                    sh 'docker ps -a'
+
+                    echo "Container logs..."
+
+                    sh 'docker logs jenkins-maven-project'
+
+                    echo "Container created successfully"
                 }
             }
         }
+
 
         stage('Docker Security Scan') {
             when {
