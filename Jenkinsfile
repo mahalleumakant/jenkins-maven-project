@@ -220,9 +220,9 @@ pipeline {
                     try {
                         echo "Creating Docker container from image..."
                         sh """
-                            docker run -d -p 5000:5000 --name ${env.APP_NAME} -p ${env.PORT}:${env.PORT} \
-                            -e JAVA_OPTS="-Xmx512m" \
-                            ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} || echo "Container creation completed with issues"
+                            sudo docker stop ${env.APP_NAME} 2>/dev/null || true
+                            sudo docker rm ${env.APP_NAME} 2>/dev/null || true
+                            sudo docker run -d -p 5000:5000 --name ${env.APP_NAME} mahalleumakant/jenkins-maven-project:latest
                         """
                         echo "✓ Docker container created successfully"
                         sh "docker ps | grep ${env.APP_NAME}"
