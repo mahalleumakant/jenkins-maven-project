@@ -220,7 +220,7 @@ pipeline {
                     try {
                         echo "Creating Docker container from image..."
                         sh """
-                            docker run -d --name ${env.APP_NAME} -p ${env.PORT}:${env.PORT} \
+                            docker run -d -p 5000:5000 --name ${env.APP_NAME} -p ${env.PORT}:${env.PORT} \
                             -e JAVA_OPTS="-Xmx512m" \
                             ${env.DOCKER_IMAGE}:${env.DOCKER_TAG} || echo "Container creation completed with issues"
                         """
