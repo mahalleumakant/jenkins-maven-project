@@ -223,6 +223,7 @@ pipeline {
                             sudo docker stop ${env.APP_NAME} 2>/dev/null || true
                             sudo docker rm ${env.APP_NAME} 2>/dev/null || true
                             sudo docker run -d -p 5000:5000 --name ${env.APP_NAME} umahalle/jenkins-maven-project
+                            
                         """
                         echo "✓ Docker container created successfully"
                         sh "docker ps | grep ${env.APP_NAME}"
