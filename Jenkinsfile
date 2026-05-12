@@ -3,7 +3,7 @@ pipeline {
     
     tools {
         maven 'myMaven' // Make sure this matches your Jenkins Maven configuration
-        jdk 'myJAVA'     // Make sure this matches your Jenkins JDK configuration
+        jdk 'myJava'     // Make sure this matches your Jenkins JDK configuration
     }
     
     environment {
@@ -11,7 +11,7 @@ pipeline {
         APP_NAME = 'jenkins-maven-project'
         BUILD_VERSION = "${env.BUILD_NUMBER}"
         MAVEN_OPTS = '-Dmaven.test.failure.ignore=false'
-        DOCKER_IMAGE = "atuljkamble/${APP_NAME}"
+        DOCKER_IMAGE = "umahalle/${APP_NAME}"
         DOCKER_TAG = "${env.BUILD_NUMBER}"
         PORT = '5000'
     }
